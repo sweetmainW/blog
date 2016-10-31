@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mapper.DiaryMapper" >
+  <resultMap id="BaseResultMap" type="po.Diary" >
+    <id column="lid" property="lid" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="text" property="text" jdbcType="VARCHAR" />
+    <result column="lcreateTime" property="lcreateTime" jdbcType="TIMESTAMP" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    lid, title, text, lcreateTime, uid
+  </sql>
+  <!--  根据 lid 主键查找 日记 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from diary
+    where lid = #{lid,jdbcType=INTEGER}
+  </select>
+  
+  <!--  根据 uid 外键查找 日记 -->
+  <select id="selectByUid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from diary
+    where uid = #{uid,jdbcType=INTEGER}
+  </select>
+  
+  <!--根据标题模糊查询 -->
+  <select id="selectByTitle" resultMap="BaseResultMap" parameterType="po.Diary" >
+    select 
+    <include refid="Base_Column_List" />
+    from diary 
+    <where>
+	    <!-- 查询自己 uid 所属的日记 -->
+	    uid = #{uid,jdbcType=INTEGER}
+	    <!-- 如果查询参数为空，默认查询所有日记 -->
+	    <if test="title!=null and title != ''">
+	      and title like  "%"#{title,jdbcType=VARCHAR}"%" 
+	    </if>
+    </where>
+  </select>
+  
+  
+  <!-- 删除 lid 日记 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from diary
+    where lid = #{lid,jdbcType=INTEGER}
+  </delete>
+  <!--  插入新日记  -->
+  <insert id="insertDiary" parameterType="po.Diary" >
+    insert into diary ( title, text, 
+      lcreateTime, uid)
+    values ( #{title,jdbcType=VARCHAR}, #{text,jdbcType=VARCHAR}, 
+      now(), #{uid,jdbcType=INTEGER})
+  </insert>
+  <!--  更新日记 -->
+  <update id="updateDiary" parameterType="po.Diary" >
+    update diary
+    set title = #{title,jdbcType=VARCHAR},
+      text = #{text,jdbcType=VARCHAR},
+      lcreateTime = now()
+    where lid = #{lid,jdbcType=INTEGER}
+  </update>
+</mapper>

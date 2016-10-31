@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="po.User" >
+    <id column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="uname" property="uname" jdbcType="CHAR" />
+    <result column="password" property="password" jdbcType="CHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    uid, uname, password, createTime
+  </sql>
+  <!-- 根据 uid 查找用户 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where uid = #{uid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据用户名模糊查询 -->
+  <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where uname = #{uname,jdbcType=CHAR}
+  </select>
+   
+  <!-- 根据 uid 删除用户 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where uid = #{uid,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 插入新用户 -->
+  <insert id="insertUser" parameterType="po.User" >
+    insert into user ( uname, password, 
+      createTime)
+    values ( #{uname,jdbcType=CHAR}, #{password,jdbcType=CHAR}, 
+      now())
+  </insert>
+  
+  <!-- 根据 uid 更新用户 -->
+  <update id="updateByPrimaryKey" parameterType="po.User" >
+    update user
+    set uname = #{uname,jdbcType=CHAR},
+      password = #{password,jdbcType=CHAR},
+      createTime = now()
+    where uid = #{uid,jdbcType=INTEGER}
+  </update>
+</mapper>
