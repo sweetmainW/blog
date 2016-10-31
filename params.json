@@ -1,0 +1,6 @@
+{
+  "name": "Blog",
+  "tagline": "基于Maven的ssm日记项目（增删改查分页）",
+  "body": "# 日记项目\r\n## 技术点\r\n* Spring\r\n* MyBatis\r\n* SpringMVC\r\n* MySQL\r\n* jQuery\r\n* Ajax\r\n\r\n## 主要页面\r\n* 添加日记\r\n* 修改日记\r\n* 删除日记\r\n* 搜索日记\r\n* 注册用户\r\n* 登录用户",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
